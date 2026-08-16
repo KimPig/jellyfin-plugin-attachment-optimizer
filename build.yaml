@@ -1,7 +1,7 @@
 ---
 name: "Attachment Optimizer"
 guid: "41341b7d-9374-4c82-824a-21d360036771"
-version: "1.0.0.0"
+version: "12.0.0.0"
 targetAbi: "12.0.0.0"
 framework: "net10.0"
 overview: "Optimizes Jellyfin attachment extraction, deduplication, and cache cleanup."
