@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Jellyfin.Plugin.AttachmentOptimizer.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -50,23 +49,6 @@ public sealed class AttachmentStoreTests : IDisposable
 
         Assert.EndsWith(expectedExtension, blob.Path, StringComparison.Ordinal);
         Assert.Equal(blob.Path, store.FindBlobPath(blob.Hash));
-    }
-    [Fact]
-    public void LegacyBlobLayoutIsMigratedAndTyped()
-    {
-        byte[] fontBytes = [0x00, 0x01, 0x00, 0x00, 0x53, 0x75, 0x62, 0x4d, 0x75, 0x78];
-        var hash = Convert.ToHexStringLower(SHA256.HashData(fontBytes));
-        var legacyPath = Path.Combine(_root, "attachment-optimizer", "blobs", hash[..2], hash);
-        Directory.CreateDirectory(Path.GetDirectoryName(legacyPath)!);
-        File.WriteAllBytes(legacyPath, fontBytes);
-
-        var store = new AttachmentStore(_root, NullLogger<AttachmentStore>.Instance);
-        var migratedPath = store.FindBlobPath(hash);
-
-        Assert.NotNull(migratedPath);
-        Assert.EndsWith(".ttf", migratedPath, StringComparison.Ordinal);
-        Assert.True(File.Exists(migratedPath));
-        Assert.False(File.Exists(legacyPath));
     }
 
     [Fact]

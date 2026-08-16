@@ -43,8 +43,6 @@ attachment-optimizer/
   temp/         unique temporary extraction directories
 ```
 
-The first run automatically migrates the plugin's earlier `blobs` and `manifests` test-cache layout.
-
 Jellyfin-compatible files may also be materialized below Jellyfin's normal `attachments` directory when a server workflow requires a filesystem `fontsdir`. Those paths are recorded in the manifest before they become eligible for cleanup.
 
 ## Compatibility and limitations

@@ -39,7 +39,6 @@ internal sealed class AttachmentStore
         ManifestRootPath = Path.Combine(RootPath, "media");
         WorkRootPath = Path.Combine(RootPath, "temp");
         AttachmentRootPath = Path.Combine(dataPath, "attachments");
-        MigrateLegacyLayout();
     }
 
     public string RootPath { get; }
@@ -332,68 +331,6 @@ internal sealed class AttachmentStore
     private string GetManifestPath(string mediaSourceId) =>
         Path.Combine(ManifestRootPath, GetSafeMediaSourceId(mediaSourceId), "manifest.json");
 
-    private void MigrateLegacyLayout()
-    {
-        var legacyBlobRoot = Path.Combine(RootPath, "blobs");
-        var legacyManifestRoot = Path.Combine(RootPath, "manifests");
-        try
-        {
-            if (Directory.Exists(legacyBlobRoot))
-            {
-                foreach (var legacyPath in Directory.EnumerateFiles(
-                             legacyBlobRoot,
-                             "*",
-                             SearchOption.AllDirectories))
-                {
-                    var hash = Path.GetFileName(legacyPath);
-                    if (!IsSha256(hash))
-                    {
-                        continue;
-                    }
-
-                    var targetPath = GetBlobPath(hash, DetectAttachmentExtension(legacyPath));
-                    Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
-                    if (File.Exists(targetPath))
-                    {
-                        File.Delete(legacyPath);
-                    }
-                    else
-                    {
-                        File.Move(legacyPath, targetPath);
-                    }
-                }
-            }
-
-            if (Directory.Exists(legacyManifestRoot))
-            {
-                foreach (var legacyPath in Directory.EnumerateFiles(
-                             legacyManifestRoot,
-                             "*.json",
-                             SearchOption.TopDirectoryOnly))
-                {
-                    var mediaSourceId = Path.GetFileNameWithoutExtension(legacyPath);
-                    if (!Guid.TryParseExact(mediaSourceId, "N", out var id))
-                    {
-                        continue;
-                    }
-
-                    var targetPath = GetManifestPath(id.ToString("D"));
-                    Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
-                    if (!File.Exists(targetPath))
-                    {
-                        File.Move(legacyPath, targetPath);
-                    }
-                }
-            }
-
-            TryDeleteDirectoryIfEmpty(legacyBlobRoot);
-            TryDeleteDirectoryIfEmpty(legacyManifestRoot);
-        }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
-        {
-            _logger.LogWarning(exception, "Unable to migrate the legacy Attachment Optimizer cache layout");
-        }
-    }
     private static string DetectAttachmentExtension(string path)
     {
         using var stream = new FileStream(
@@ -454,27 +391,6 @@ internal sealed class AttachmentStore
         return ".blob";
     }
 
-    private static void TryDeleteDirectoryIfEmpty(string path)
-    {
-        if (!Directory.Exists(path))
-        {
-            return;
-        }
-
-        foreach (var directory in Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories)
-                     .OrderByDescending(static directory => directory.Length))
-        {
-            if (!Directory.EnumerateFileSystemEntries(directory).Any())
-            {
-                Directory.Delete(directory);
-            }
-        }
-
-        if (!Directory.EnumerateFileSystemEntries(path).Any())
-        {
-            Directory.Delete(path);
-        }
-    }
     private static string GetSafeMediaSourceId(string mediaSourceId)
     {
         if (!Guid.TryParse(mediaSourceId, out var id))
