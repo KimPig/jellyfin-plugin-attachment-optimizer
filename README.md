@@ -4,6 +4,18 @@ A Jellyfin 12 plugin that batches embedded attachment extraction, deduplicates i
 
 Download the ready-to-install ZIP from [GitHub Releases](https://github.com/KimPig/jellyfin-plugin-attachment-optimizer/releases).
 
+## Catalog installation
+
+Add the shared KimPig plugin repository in **Dashboard > Plugins > Repositories**:
+
+```text
+https://raw.githubusercontent.com/KimPig/jellyfin-plugin-repository/main/manifest.json
+```
+
+Use `KimPig Jellyfin Plugins` as the repository name. After saving it, open the
+plugin catalog, install Attachment Optimizer, and restart Jellyfin Server.
+The same catalog also provides Subtitle Font Bridge.
+
 ## What it does
 
 - Extracts all currently missing attachments from one media source with a single FFmpeg process.
