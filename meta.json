@@ -1,0 +1,16 @@
+{
+  "category": "General",
+  "changelog": "- Batch missing attachments in one FFmpeg process.\n- Deduplicate content with SHA-256 and hard links.\n- Preserve detected font formats and manage cache cleanup.",
+  "description": "Batches Jellyfin attachment extraction, deduplicates identical files, preserves detected font formats, and safely manages plugin-owned cache data.",
+  "guid": "41341b7d-9374-4c82-824a-21d360036771",
+  "name": "Attachment Optimizer",
+  "overview": "Batch extraction, deduplication, and managed attachment caching for Jellyfin.",
+  "owner": "KimPig",
+  "targetAbi": "12.0.0.0",
+  "timestamp": "2026-08-16T06:20:00.0000000Z",
+  "version": "1.0.0.0",
+  "status": "Active",
+  "autoUpdate": false,
+  "imagePath": null,
+  "assemblies": []
+}

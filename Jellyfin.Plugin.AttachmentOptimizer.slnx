@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Jellyfin.Plugin.AttachmentOptimizer/Jellyfin.Plugin.AttachmentOptimizer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Jellyfin.Plugin.AttachmentOptimizer.Tests/Jellyfin.Plugin.AttachmentOptimizer.Tests.csproj" />
+  </Folder>
+</Solution>
