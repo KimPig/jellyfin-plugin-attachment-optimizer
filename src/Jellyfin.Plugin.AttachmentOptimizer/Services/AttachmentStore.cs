@@ -328,6 +328,82 @@ internal sealed class AttachmentStore
         }
     }
 
+    public int DeleteEmptyCompatibilityDirectories(
+        bool dryRun,
+        CancellationToken cancellationToken)
+    {
+        if (!Directory.Exists(AttachmentRootPath))
+        {
+            return 0;
+        }
+
+        string[] directories;
+        try
+        {
+            directories = Directory.GetDirectories(
+                AttachmentRootPath,
+                "*",
+                SearchOption.TopDirectoryOnly);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(
+                exception,
+                "Unable to enumerate Jellyfin attachment cache directories under {AttachmentRootPath}",
+                AttachmentRootPath);
+            return 0;
+        }
+
+        var removed = 0;
+        foreach (var path in directories)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var directoryName = Path.GetFileName(Path.TrimEndingDirectorySeparator(path));
+            if (!Guid.TryParse(directoryName, out var mediaSourceId)
+                || IsActive(directoryName)
+                || IsActive(mediaSourceId.ToString("D"))
+                || IsActive(mediaSourceId.ToString("N")))
+            {
+                continue;
+            }
+
+            try
+            {
+                if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0
+                    || Directory.EnumerateFileSystemEntries(path).Any())
+                {
+                    continue;
+                }
+
+                if (dryRun)
+                {
+                    _logger.LogInformation(
+                        "Cleanup dry run would remove empty attachment cache directory {Path}",
+                        path);
+                }
+                else
+                {
+                    Directory.Delete(path, recursive: false);
+                }
+
+                removed++;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // Another cleanup or request removed the directory first.
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+            {
+                _logger.LogDebug(
+                    exception,
+                    "Unable to remove empty attachment cache directory {Path}",
+                    path);
+            }
+        }
+
+        return removed;
+    }
+
     private string GetManifestPath(string mediaSourceId) =>
         Path.Combine(ManifestRootPath, GetSafeMediaSourceId(mediaSourceId), "manifest.json");
 

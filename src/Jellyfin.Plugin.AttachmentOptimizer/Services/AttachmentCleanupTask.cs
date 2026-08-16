@@ -25,7 +25,7 @@ internal sealed class AttachmentCleanupTask : IScheduledTask
     public string Key => "AttachmentOptimizerCleanup";
 
     public string Description =>
-        "Removes expired compatibility files and content-addressed blobs managed by Attachment Optimizer.";
+        "Removes expired cache files and empty Jellyfin attachment cache directories.";
 
     public string Category => "Maintenance";
 
@@ -171,12 +171,17 @@ internal sealed class AttachmentCleanupTask : IScheduledTask
             }
         }
 
+        var removedEmptyDirectories = _store.DeleteEmptyCompatibilityDirectories(
+            options.CleanupDryRun,
+            cancellationToken);
+
         progress.Report(100);
         _logger.LogInformation(
-            "Attachment Optimizer cleanup {Mode}: {CompatibilityCount} compatibility files, {BlobCount} blobs, {ReclaimedBytes} bytes",
+            "Attachment Optimizer cleanup {Mode}: {CompatibilityCount} compatibility files, {BlobCount} blobs, {EmptyDirectoryCount} empty directories, {ReclaimedBytes} bytes",
             options.CleanupDryRun ? "dry run" : "completed",
             removedCompatibilityFiles,
             removedBlobs,
+            removedEmptyDirectories,
             reclaimedBytes);
     }
 

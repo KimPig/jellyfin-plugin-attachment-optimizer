@@ -55,7 +55,7 @@ attachment-optimizer/
   temp/         unique temporary extraction directories
 ```
 
-Jellyfin-compatible files may also be materialized below Jellyfin's normal `attachments` directory when a server workflow requires a filesystem `fontsdir`. Those paths are recorded in the manifest before they become eligible for cleanup.
+Jellyfin-compatible files are materialized below Jellyfin's normal `attachments` directory only when a server workflow requires a filesystem `fontsdir`. Empty per-media directories are not created during ordinary attachment delivery, and stale empty directories are removed by cache cleanup.
 
 ## Compatibility and limitations
 

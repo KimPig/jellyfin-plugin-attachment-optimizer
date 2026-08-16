@@ -140,14 +140,13 @@ internal sealed class OptimizedAttachmentExtractor : IAttachmentExtractor
             return new Dictionary<int, string>();
         }
 
-        var outputFolder = _pathManager.GetAttachmentFolderPath(mediaSource.Id)
+        _ = _pathManager.GetAttachmentFolderPath(mediaSource.Id)
             ?? throw new ResourceNotFoundException(
                 $"MediaSource {mediaSource.Id} has no attachment cache because its id is not a GUID.");
         using var lease = _store.AcquireLease(mediaSource.Id);
         using var mediaLock = await _store.LockMediaSourceAsync(
             mediaSource.Id,
             cancellationToken).ConfigureAwait(false);
-        Directory.CreateDirectory(outputFolder);
 
         var sourceFingerprint = _store.CreateSourceFingerprint(inputFile);
         var manifest = options.EnableDeduplication

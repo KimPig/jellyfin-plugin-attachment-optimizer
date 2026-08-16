@@ -81,6 +81,54 @@ public sealed class AttachmentStoreTests : IDisposable
         Assert.Equal("fingerprint-two", invalidated.SourceFingerprint);
     }
 
+    [Fact]
+    public void EmptyCompatibilityDirectoriesAreRemovedSafely()
+    {
+        var store = new AttachmentStore(_root, NullLogger<AttachmentStore>.Instance);
+        var emptyId = Guid.NewGuid().ToString("N");
+        var activeId = Guid.NewGuid().ToString("N");
+        var nonEmptyId = Guid.NewGuid().ToString("N");
+        var unrelatedName = "keep-me";
+        var emptyPath = Path.Combine(store.AttachmentRootPath, emptyId);
+        var activePath = Path.Combine(store.AttachmentRootPath, activeId);
+        var nonEmptyPath = Path.Combine(store.AttachmentRootPath, nonEmptyId);
+        var unrelatedPath = Path.Combine(store.AttachmentRootPath, unrelatedName);
+        Directory.CreateDirectory(emptyPath);
+        Directory.CreateDirectory(activePath);
+        Directory.CreateDirectory(nonEmptyPath);
+        Directory.CreateDirectory(unrelatedPath);
+        File.WriteAllText(Path.Combine(nonEmptyPath, "font.ttf"), "font");
+        using var lease = store.AcquireLease(activeId);
+
+        var removed = store.DeleteEmptyCompatibilityDirectories(
+            dryRun: false,
+            CancellationToken.None);
+
+        Assert.Equal(1, removed);
+        Assert.False(Directory.Exists(emptyPath));
+        Assert.True(Directory.Exists(activePath));
+        Assert.True(Directory.Exists(nonEmptyPath));
+        Assert.True(File.Exists(Path.Combine(nonEmptyPath, "font.ttf")));
+        Assert.True(Directory.Exists(unrelatedPath));
+    }
+
+    [Fact]
+    public void CleanupDryRunKeepsEmptyCompatibilityDirectories()
+    {
+        var store = new AttachmentStore(_root, NullLogger<AttachmentStore>.Instance);
+        var emptyPath = Path.Combine(
+            store.AttachmentRootPath,
+            Guid.NewGuid().ToString("D"));
+        Directory.CreateDirectory(emptyPath);
+
+        var removed = store.DeleteEmptyCompatibilityDirectories(
+            dryRun: true,
+            CancellationToken.None);
+
+        Assert.Equal(1, removed);
+        Assert.True(Directory.Exists(emptyPath));
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_root))
