@@ -31,7 +31,7 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
 
     /// <inheritdoc />
     public override string Description =>
-        "Optimizes Jellyfin attachment extraction, deduplication, and cache cleanup.";
+        "Pre-extracts subtitles and optimizes attachment extraction, deduplication, and cache cleanup.";
 
     /// <inheritdoc />
     public override Guid Id => PluginId;
@@ -52,6 +52,24 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
                 EmbeddedResourcePath = string.Format(
                     CultureInfo.InvariantCulture,
                     "{0}.Configuration.configPage.html",
+                    GetType().Namespace)
+            },
+            new PluginPageInfo
+            {
+                Name = "attachmentoptimizer.css",
+                EnableInMainMenu = false,
+                EmbeddedResourcePath = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}.Configuration.attachmentoptimizer.css",
+                    GetType().Namespace)
+            },
+            new PluginPageInfo
+            {
+                Name = "attachmentoptimizer.js",
+                EnableInMainMenu = false,
+                EmbeddedResourcePath = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}.Configuration.attachmentoptimizer.js",
                     GetType().Namespace)
             }
         ];

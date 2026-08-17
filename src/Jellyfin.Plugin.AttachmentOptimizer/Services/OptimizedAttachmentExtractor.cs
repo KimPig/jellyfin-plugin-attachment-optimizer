@@ -14,7 +14,7 @@ namespace Jellyfin.Plugin.AttachmentOptimizer.Services;
 /// <summary>
 /// Batches attachment extraction and optionally stores content by SHA-256.
 /// </summary>
-internal sealed class OptimizedAttachmentExtractor : IAttachmentExtractor
+internal sealed class OptimizedAttachmentExtractor : IAttachmentExtractor, IAttachmentPrecacheService
 {
     private readonly ILogger<OptimizedAttachmentExtractor> _logger;
     private readonly IMediaSourceManager _mediaSourceManager;
@@ -126,6 +126,33 @@ internal sealed class OptimizedAttachmentExtractor : IAttachmentExtractor
             options,
             cancellationToken).ConfigureAwait(false);
     }
+
+    /// <inheritdoc />
+    public async Task PrecacheAllAttachmentsAsync(
+        string inputFile,
+        MediaSourceInfo mediaSource,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(inputFile);
+        ArgumentNullException.ThrowIfNull(mediaSource);
+
+        if (_pathManager.GetAttachmentFolderPath(mediaSource.Id) is null)
+        {
+            _logger.LogDebug(
+                "Skipping attachment pre-cache for {InputFile}: MediaSource id is not a GUID",
+                inputFile);
+            return;
+        }
+
+        await EnsureAttachmentsAsync(
+            inputFile,
+            mediaSource,
+            GetEligibleAttachments(mediaSource),
+            materializeCompatibilityFiles: false,
+            RuntimeOptions.Current,
+            cancellationToken).ConfigureAwait(false);
+    }
+
 
     private async Task<IReadOnlyDictionary<int, string>> EnsureAttachmentsAsync(
         string inputFile,

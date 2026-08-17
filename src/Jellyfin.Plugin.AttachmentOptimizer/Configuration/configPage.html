@@ -1,119 +1,233 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Attachment Optimizer</title>
 </head>
 <body>
-    <div id="AttachmentOptimizerConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+    <div id="AttachmentOptimizerConfigPage"
+         data-role="page"
+         class="page type-interior pluginConfigurationPage aoPage"
+         data-require="emby-input,emby-button,emby-checkbox">
         <div data-role="content">
             <div class="content-primary">
                 <form id="AttachmentOptimizerConfigForm">
-                    <h2>Extraction</h2>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="EnableBatchExtraction" type="checkbox" is="emby-checkbox" />
-                            <span>Batch missing attachments</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">Use one FFmpeg process with one -dump_attachment option per missing attachment. Existing cached files are not overwritten.</div>
+                    <header class="aoHeader">
+                        <h1>Attachment Optimizer</h1>
+                        <p>Prepare embedded media before playback and keep attachment storage compact, reusable, and easy to maintain.</p>
+                    </header>
+
+                    <div class="aoLayout">
+                        <section class="aoArea aoAreaOptimizer" aria-labelledby="OptimizerHeading">
+                            <header class="aoAreaHeader">
+                                <span class="aoAreaNumber" aria-hidden="true">01</span>
+                                <span class="material-icons" aria-hidden="true">inventory_2</span>
+                                <span>
+                                    <span class="aoEyebrow">Optimizer</span>
+                                    <h2 id="OptimizerHeading">Attachment optimization</h2>
+                                    <p>Batch extraction, reuse identical data, and maintain the plugin cache.</p>
+                                </span>
+                            </header>
+
+                            <div class="aoGroup">
+                                <div class="aoGroupHeader">
+                                    <h3>Extraction and storage</h3>
+                                    <p>Control on-demand extraction, shared storage, and burn-in compatibility.</p>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="EnableBatchExtraction" type="checkbox" is="emby-checkbox" />
+                                        <span>Batch missing attachments</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Extract all currently missing attachments with one FFmpeg process.</div>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="EnableDeduplication" type="checkbox" is="emby-checkbox" />
+                                        <span>Store identical content once</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Reuse identical attachment bytes across media sources by SHA-256.</div>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="EnableHardLinks" type="checkbox" is="emby-checkbox" />
+                                        <span>Use hard links for compatibility files</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Avoid copies when burn-in needs Jellyfin's standard attachment path.</div>
+                                </div>
+
+                                <div class="aoNotice">
+                                    <span class="material-icons" aria-hidden="true">info</span>
+                                    <span>Use this plugin's <strong>Extract Embedded Attachments</strong> task instead of Subtitle Extract's attachment task. Running both can create duplicate compatibility files.</span>
+                                </div>
+                            </div>
+
+                            <div class="aoGroup">
+                                <div class="aoGroupHeader aoGroupHeaderWithBadge">
+                                    <span>
+                                        <h3>Cache cleanup</h3>
+                                        <p>Only files and manifests managed by Attachment Optimizer are touched.</p>
+                                    </span>
+                                    <strong class="aoTaskBadge">Daily task</strong>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="EnableAutomaticCleanup" type="checkbox" is="emby-checkbox" />
+                                        <span>Enable automatic cleanup</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Recently used and active media sources are skipped.</div>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="CleanupDryRun" type="checkbox" is="emby-checkbox" />
+                                        <span>Dry run</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Report cleanup candidates without deleting them.</div>
+                                </div>
+
+                                <div class="aoNumberGrid">
+                                    <div class="inputContainer">
+                                        <label class="inputLabel inputLabelUnfocused" for="CompatibilityFileRetentionHours">Compatibility retention</label>
+                                        <div class="aoNumberField">
+                                            <input id="CompatibilityFileRetentionHours" type="number" is="emby-input" min="1" max="8760" />
+                                            <span>hours</span>
+                                        </div>
+                                    </div>
+                                    <div class="inputContainer">
+                                        <label class="inputLabel inputLabelUnfocused" for="BlobRetentionDays">Unused blob retention</label>
+                                        <div class="aoNumberField">
+                                            <input id="BlobRetentionDays" type="number" is="emby-input" min="1" max="3650" />
+                                            <span>days</span>
+                                        </div>
+                                    </div>
+                                    <div class="inputContainer">
+                                        <label class="inputLabel inputLabelUnfocused" for="MaximumBlobCacheSizeGiB">Maximum blob cache</label>
+                                        <div class="aoNumberField">
+                                            <input id="MaximumBlobCacheSizeGiB" type="number" is="emby-input" min="1" max="1024" />
+                                            <span>GiB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="aoArea aoAreaExtraction" aria-labelledby="ExtractionHeading">
+                            <header class="aoAreaHeader">
+                                <span class="aoAreaNumber" aria-hidden="true">02</span>
+                                <span class="material-icons" aria-hidden="true">subtitles</span>
+                                <span>
+                                    <span class="aoEyebrow">Extractor</span>
+                                    <h2 id="ExtractionHeading">Embedded media extraction</h2>
+                                    <p>Make subtitles and attachments ready before playback needs them.</p>
+                                </span>
+                            </header>
+
+                            <div class="aoGroup">
+                                <div class="aoGroupHeader">
+                                    <h3>Library scan</h3>
+                                    <p>Run extraction automatically while media is scanned or refreshed.</p>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="ExtractSubtitlesDuringLibraryScan" type="checkbox" is="emby-checkbox" />
+                                        <span>Extract embedded subtitles during library scan</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Makes embedded subtitles available sooner. Library scans may take longer.</div>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="PrecacheAttachmentsDuringLibraryScan" type="checkbox" is="emby-checkbox" />
+                                        <span>Extract embedded attachments during library scan</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Stores attachments in the deduplicated optimizer cache.</div>
+                                </div>
+
+                                <div class="aoTaskLine">
+                                    <span>Also available as scheduled tasks</span>
+                                    <strong>Extract Embedded Subtitles</strong>
+                                    <strong>Extract Embedded Attachments</strong>
+                                </div>
+                            </div>
+
+                            <div class="aoGroup">
+                                <div class="aoGroupHeader">
+                                    <h3>Libraries</h3>
+                                    <p>Leave a list empty to include every movie and TV library.</p>
+                                </div>
+
+                                <details class="aoDisclosure">
+                                    <summary>
+                                        <span>
+                                            <strong>Subtitle extraction</strong>
+                                            <small>Choose libraries for embedded subtitle extraction.</small>
+                                        </span>
+                                        <span id="SubtitleLibraryCount" class="aoSelectionCount">All libraries</span>
+                                        <span class="material-icons aoDisclosureIcon" aria-hidden="true">expand_more</span>
+                                    </summary>
+                                    <div class="aoDisclosureBody">
+                                        <div id="SubtitleLibraryList" class="aoChoiceGrid"></div>
+                                    </div>
+                                </details>
+
+                                <details class="aoDisclosure">
+                                    <summary>
+                                        <span>
+                                            <strong>Attachment extraction</strong>
+                                            <small>Choose libraries for embedded attachment extraction.</small>
+                                        </span>
+                                        <span id="AttachmentLibraryCount" class="aoSelectionCount">All libraries</span>
+                                        <span class="material-icons aoDisclosureIcon" aria-hidden="true">expand_more</span>
+                                    </summary>
+                                    <div class="aoDisclosureBody">
+                                        <div id="AttachmentLibraryList" class="aoChoiceGrid"></div>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <div class="aoGroup">
+                                <div class="aoGroupHeader">
+                                    <h3>Subtitle formats</h3>
+                                    <p>All embedded subtitle codecs are included unless a limit is enabled.</p>
+                                </div>
+
+                                <div class="checkboxContainer checkboxContainer-withDescription">
+                                    <label class="emby-checkbox-label">
+                                        <input id="LimitSubtitleFormats" type="checkbox" is="emby-checkbox" />
+                                        <span>Limit subtitle formats</span>
+                                    </label>
+                                    <div class="fieldDescription checkboxFieldDescription">Only extract media whose embedded subtitle streams all match the selected codecs.</div>
+                                </div>
+
+                                <div id="SubtitleCodecMode" class="aoExpandablePanel" style="display: none;">
+                                    <div class="aoExpandableHeader">
+                                        <strong>Select allowed codecs</strong>
+                                        <span id="SubtitleCodecCount" class="aoSelectionCount">All selected</span>
+                                    </div>
+                                    <div id="SubtitleCodecList" class="aoChoiceGrid"></div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
-                    <h2>Deduplication</h2>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="EnableDeduplication" type="checkbox" is="emby-checkbox" />
-                            <span>Store identical attachment content once</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">Store extracted bytes by SHA-256 and reuse them across media sources.</div>
+                    <div class="aoSaveBar">
+                        <span><strong>Attachment Optimizer</strong><small>All settings on this page are saved together.</small></span>
+                        <button is="emby-button" type="submit" class="raised button-submit emby-button aoSave">
+                            <span>Save</span>
+                        </button>
                     </div>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="EnableHardLinks" type="checkbox" is="emby-checkbox" />
-                            <span>Use hard links for burn-in compatibility files</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">Avoid physical copies in Jellyfin's per-media attachment folders when the filesystem supports hard links. A verified copy is used as fallback.</div>
-                    </div>
-
-                    <h2>Automatic cleanup</h2>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="EnableAutomaticCleanup" type="checkbox" is="emby-checkbox" />
-                            <span>Enable daily cleanup</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">Clean only files and manifests managed by this plugin. Recently used and active media sources are skipped.</div>
-                    </div>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="CleanupDryRun" type="checkbox" is="emby-checkbox" />
-                            <span>Dry run</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">Report cleanup candidates without deleting them. Keep this enabled for the first scheduled run.</div>
-                    </div>
-                    <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="CompatibilityFileRetentionHours">Compatibility file retention (hours)</label>
-                        <input id="CompatibilityFileRetentionHours" type="number" is="emby-input" min="1" max="8760" />
-                        <div class="fieldDescription">Per-media hard links or copies older than this are eligible for cleanup.</div>
-                    </div>
-                    <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="BlobRetentionDays">Unused blob retention (days)</label>
-                        <input id="BlobRetentionDays" type="number" is="emby-input" min="1" max="3650" />
-                        <div class="fieldDescription">Unreferenced SHA-256 blobs older than this are eligible for cleanup.</div>
-                    </div>
-                    <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="MaximumBlobCacheSizeGiB">Maximum blob cache size (GiB)</label>
-                        <input id="MaximumBlobCacheSizeGiB" type="number" is="emby-input" min="1" max="1024" />
-                        <div class="fieldDescription">The cleanup task evicts least-recently-used blobs when the cache exceeds this limit.</div>
-                    </div>
-
-                    <div class="fieldDescription" style="margin: 1.5em 0;">Changes apply to new attachment requests immediately. Run <strong>Clean Attachment Optimizer Cache</strong> from Scheduled Tasks to test cleanup manually.</div>
-                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                        <span>Save</span>
-                    </button>
                 </form>
             </div>
         </div>
-        <script type="text/javascript">
-            var AttachmentOptimizerConfig = {
-                pluginUniqueId: '41341b7d-9374-4c82-824a-21d360036771'
-            };
 
-            document.querySelector('#AttachmentOptimizerConfigPage')
-                .addEventListener('pageshow', function() {
-                    Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(AttachmentOptimizerConfig.pluginUniqueId).then(function(config) {
-                        document.querySelector('#EnableBatchExtraction').checked = config.EnableBatchExtraction;
-                        document.querySelector('#EnableDeduplication').checked = config.EnableDeduplication;
-                        document.querySelector('#EnableHardLinks').checked = config.EnableHardLinks;
-                        document.querySelector('#EnableAutomaticCleanup').checked = config.EnableAutomaticCleanup;
-                        document.querySelector('#CleanupDryRun').checked = config.CleanupDryRun;
-                        document.querySelector('#CompatibilityFileRetentionHours').value = config.CompatibilityFileRetentionHours;
-                        document.querySelector('#BlobRetentionDays').value = config.BlobRetentionDays;
-                        document.querySelector('#MaximumBlobCacheSizeGiB').value = config.MaximumBlobCacheSizeGiB;
-                        Dashboard.hideLoadingMsg();
-                    });
-                });
-
-            document.querySelector('#AttachmentOptimizerConfigForm')
-                .addEventListener('submit', function(event) {
-                    Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(AttachmentOptimizerConfig.pluginUniqueId).then(function(config) {
-                        config.EnableBatchExtraction = document.querySelector('#EnableBatchExtraction').checked;
-                        config.EnableDeduplication = document.querySelector('#EnableDeduplication').checked;
-                        config.EnableHardLinks = document.querySelector('#EnableHardLinks').checked;
-                        config.EnableAutomaticCleanup = document.querySelector('#EnableAutomaticCleanup').checked;
-                        config.CleanupDryRun = document.querySelector('#CleanupDryRun').checked;
-                        config.CompatibilityFileRetentionHours = Number(document.querySelector('#CompatibilityFileRetentionHours').value);
-                        config.BlobRetentionDays = Number(document.querySelector('#BlobRetentionDays').value);
-                        config.MaximumBlobCacheSizeGiB = Number(document.querySelector('#MaximumBlobCacheSizeGiB').value);
-                        ApiClient.updatePluginConfiguration(AttachmentOptimizerConfig.pluginUniqueId, config).then(function(result) {
-                            Dashboard.processPluginConfigurationUpdateResult(result);
-                        });
-                    });
-
-                    event.preventDefault();
-                    return false;
-                });
-        </script>
+        <link rel="stylesheet" href="configurationpage?name=attachmentoptimizer.css">
+        <script type="text/javascript" src="configurationpage?name=attachmentoptimizer.js"></script>
     </div>
 </body>
 </html>

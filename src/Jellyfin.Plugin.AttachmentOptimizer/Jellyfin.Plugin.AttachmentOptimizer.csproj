@@ -3,7 +3,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>Jellyfin.Plugin.AttachmentOptimizer</RootNamespace>
     <AssemblyName>Jellyfin.Plugin.AttachmentOptimizer</AssemblyName>
-    <Description>Optimizes Jellyfin attachment extraction, deduplication, and cache cleanup.</Description>
+    <Description>Pre-extracts subtitles and optimizes Jellyfin attachment extraction, deduplication, and cache cleanup.</Description>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -25,6 +25,10 @@
   <ItemGroup>
     <None Remove="Configuration\configPage.html" />
     <EmbeddedResource Include="Configuration\configPage.html" />
+    <None Remove="Configuration\attachmentoptimizer.css" />
+    <EmbeddedResource Include="Configuration\attachmentoptimizer.css" />
+    <None Remove="Configuration\attachmentoptimizer.js" />
+    <EmbeddedResource Include="Configuration\attachmentoptimizer.js" />
   </ItemGroup>
 
   <ItemGroup>

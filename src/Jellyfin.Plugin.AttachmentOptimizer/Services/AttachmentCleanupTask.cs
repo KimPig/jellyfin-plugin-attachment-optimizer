@@ -1,5 +1,6 @@
 using Jellyfin.Plugin.AttachmentOptimizer.Configuration;
 using MediaBrowser.Model.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.AttachmentOptimizer.Services;
@@ -7,17 +8,18 @@ namespace Jellyfin.Plugin.AttachmentOptimizer.Services;
 /// <summary>
 /// Cleans cache data managed by Attachment Optimizer.
 /// </summary>
-internal sealed class AttachmentCleanupTask : IScheduledTask
+public sealed class AttachmentCleanupTask : IScheduledTask
 {
     private readonly ILogger<AttachmentCleanupTask> _logger;
     private readonly AttachmentStore _store;
 
     public AttachmentCleanupTask(
         ILogger<AttachmentCleanupTask> logger,
-        AttachmentStore store)
+        IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _store = store;
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+        _store = serviceProvider.GetRequiredService<AttachmentStore>();
     }
 
     public string Name => "Clean Attachment Optimizer Cache";

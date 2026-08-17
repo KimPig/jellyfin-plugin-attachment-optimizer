@@ -2,7 +2,6 @@ using Jellyfin.Plugin.AttachmentOptimizer.Services;
 using MediaBrowser.Controller;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Plugins;
-using MediaBrowser.Model.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Plugin.AttachmentOptimizer;
@@ -24,7 +23,12 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
 
         // Plugin services are registered after Jellyfin core services. The final
         // single-service registration is therefore used for IAttachmentExtractor.
-        serviceCollection.AddSingleton<IAttachmentExtractor, OptimizedAttachmentExtractor>();
-        serviceCollection.AddSingleton<IScheduledTask, AttachmentCleanupTask>();
+        serviceCollection.AddSingleton<OptimizedAttachmentExtractor>();
+        serviceCollection.AddSingleton<IAttachmentExtractor>(
+            static provider => provider.GetRequiredService<OptimizedAttachmentExtractor>());
+        serviceCollection.AddSingleton<IAttachmentPrecacheService>(
+            static provider => provider.GetRequiredService<OptimizedAttachmentExtractor>());
+        serviceCollection.AddSingleton<LibraryExtractionService>();
+        serviceCollection.AddSingleton<LibraryExtractionTaskRunner>();
     }
 }

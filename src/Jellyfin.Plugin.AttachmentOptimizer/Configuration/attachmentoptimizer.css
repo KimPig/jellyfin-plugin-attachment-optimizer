@@ -1,0 +1,450 @@
+.aoPage .content-primary {
+    max-width: 78rem;
+}
+
+.aoPage,
+.aoPage * {
+    box-sizing: border-box;
+}
+
+.aoHeader {
+    margin-bottom: 1.2rem;
+}
+
+.aoHeader h1 {
+    margin-bottom: 0.3rem;
+}
+
+.aoHeader p {
+    max-width: 54rem;
+    margin: 0;
+    color: var(--secondary-text-color);
+    line-height: 1.55;
+}
+
+.aoLayout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid rgba(128, 128, 128, 0.34);
+    border-radius: 0.4rem;
+    background: rgba(128, 128, 128, 0.03);
+}
+
+.aoArea {
+    min-width: 0;
+    border-top: 0.2rem solid #00a4dc;
+}
+
+.aoAreaOptimizer {
+    border-top-color: #8f73e6;
+}
+
+.aoArea + .aoArea {
+    border-left: 1px solid rgba(128, 128, 128, 0.34);
+}
+
+.aoAreaHeader {
+    display: grid;
+    grid-template-columns: 1.4rem 2.35rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem;
+    min-height: 8.3rem;
+    padding: 1.15rem 1.2rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.26);
+    background: rgba(128, 128, 128, 0.06);
+}
+
+.aoAreaNumber {
+    padding-top: 0.68rem;
+    color: var(--secondary-text-color);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.aoAreaHeader > .material-icons {
+    display: grid;
+    place-items: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 50%;
+    background: rgba(0, 164, 220, 0.15);
+    color: #00a4dc;
+    font-size: 1.25rem;
+}
+
+.aoAreaOptimizer .aoAreaHeader > .material-icons {
+    background: rgba(143, 115, 230, 0.15);
+    color: #a88ff2;
+}
+
+.aoEyebrow {
+    display: block;
+    margin-bottom: 0.18rem;
+    color: #00a4dc;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.aoAreaOptimizer .aoEyebrow {
+    color: #a88ff2;
+}
+
+.aoAreaHeader h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    line-height: 1.25;
+}
+
+.aoAreaHeader p {
+    margin: 0.28rem 0 0;
+    color: var(--secondary-text-color);
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.aoGroup {
+    padding: 1.15rem 1.2rem;
+}
+
+.aoGroup + .aoGroup {
+    border-top: 1px solid rgba(128, 128, 128, 0.24);
+}
+
+.aoGroupHeader {
+    margin-bottom: 1rem;
+}
+
+.aoGroupHeaderWithBadge {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.aoGroupHeader h3 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.aoGroupHeader p {
+    margin: 0.28rem 0 0;
+    color: var(--secondary-text-color);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.aoGroup .checkboxContainer {
+    margin: 0 0 1rem;
+}
+
+.aoGroup .checkboxContainer:last-child {
+    margin-bottom: 0;
+}
+
+.aoGroup .checkboxFieldDescription {
+    margin-top: 0.18rem;
+    line-height: 1.4;
+}
+
+.aoTaskLine {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed rgba(128, 128, 128, 0.28);
+}
+
+.aoTaskLine > span {
+    width: 100%;
+    color: var(--secondary-text-color);
+    font-size: 0.76rem;
+}
+
+.aoTaskLine strong,
+.aoTaskBadge {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid rgba(128, 128, 128, 0.28);
+    border-radius: 0.25rem;
+    background: rgba(128, 128, 128, 0.08);
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.aoTaskBadge {
+    flex: 0 0 auto;
+    color: var(--secondary-text-color);
+}
+
+.aoDisclosure {
+    overflow: hidden;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.3rem;
+    background: rgba(0, 0, 0, 0.07);
+}
+
+.aoDisclosure + .aoDisclosure {
+    margin-top: 0.65rem;
+}
+
+.aoDisclosure summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.75rem 0.85rem;
+    list-style: none;
+    cursor: pointer;
+}
+
+.aoDisclosure summary::-webkit-details-marker {
+    display: none;
+}
+
+.aoDisclosure summary:hover {
+    background: rgba(128, 128, 128, 0.08);
+}
+
+.aoDisclosure summary:focus-visible {
+    outline: 2px solid #00a4dc;
+    outline-offset: -2px;
+}
+
+.aoDisclosure summary strong,
+.aoDisclosure summary small {
+    display: block;
+}
+
+.aoDisclosure summary strong {
+    font-size: 0.9rem;
+}
+
+.aoDisclosure summary small {
+    margin-top: 0.18rem;
+    color: var(--secondary-text-color);
+    font-size: 0.75rem;
+    line-height: 1.35;
+}
+
+.aoDisclosureIcon {
+    color: var(--secondary-text-color);
+    font-size: 1.25rem;
+    transition: transform 150ms ease;
+}
+
+.aoDisclosure[open] .aoDisclosureIcon {
+    transform: rotate(180deg);
+}
+
+.aoDisclosureBody {
+    padding: 0 0.75rem 0.75rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.aoChoiceGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.25rem 0.75rem;
+    min-height: 2.8rem;
+    margin-top: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgba(128, 128, 128, 0.22);
+    border-radius: 0.25rem;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.aoChoiceGrid:empty::after {
+    content: "No compatible libraries found.";
+    align-self: center;
+    color: var(--secondary-text-color);
+    font-size: 0.82rem;
+}
+
+#SubtitleCodecList:empty::after {
+    content: "No subtitle codecs reported by the server.";
+}
+
+.aoChoiceGrid .emby-checkbox-label {
+    min-width: 0;
+}
+
+.aoSelectionCount {
+    flex: 0 0 auto;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid rgba(128, 128, 128, 0.28);
+    border-radius: 0.25rem;
+    color: var(--secondary-text-color);
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.aoExpandablePanel {
+    margin-top: 0.8rem;
+    padding: 0.8rem;
+    border: 1px solid rgba(0, 164, 220, 0.32);
+    border-radius: 0.3rem;
+    background: rgba(0, 164, 220, 0.06);
+}
+
+.aoExpandableHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+}
+
+.aoExpandablePanel .aoChoiceGrid {
+    margin-top: 0.65rem;
+}
+
+.aoNotice {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.65rem;
+    margin-top: 0.25rem;
+    padding: 0.75rem 0.85rem;
+    border-left: 0.2rem solid #00a4dc;
+    background: rgba(0, 164, 220, 0.1);
+    font-size: 0.8rem;
+    line-height: 1.48;
+}
+
+.aoNotice > .material-icons {
+    color: #00a4dc;
+    font-size: 1.15rem;
+}
+
+.aoNumberGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+}
+
+.aoNumberGrid .inputContainer {
+    margin-bottom: 0;
+}
+
+.aoNumberGrid .inputContainer:last-child {
+    grid-column: 1 / -1;
+}
+
+.aoNumberField {
+    position: relative;
+}
+
+.aoNumberField input {
+    width: 100%;
+    padding-right: 3.5rem;
+}
+
+.aoNumberField > span {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    color: var(--secondary-text-color);
+    font-size: 0.78rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.aoSaveBar {
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid rgba(128, 128, 128, 0.28);
+    background: var(--theme-background, #101010);
+}
+
+.aoSaveBar > span,
+.aoSaveBar strong,
+.aoSaveBar small {
+    display: block;
+}
+
+.aoSaveBar strong {
+    font-size: 0.86rem;
+}
+
+.aoSaveBar small {
+    margin-top: 0.18rem;
+    color: var(--secondary-text-color);
+    font-size: 0.76rem;
+}
+
+.aoSave {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0.65rem 1.4rem;
+    line-height: 1;
+    text-align: center;
+}
+
+@media (max-width: 70rem) {
+    .aoLayout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aoArea + .aoArea {
+        border-left: 0;
+        border-top-color: #00a4dc;
+    }
+
+    .aoAreaHeader {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 44rem) {
+    .aoAreaHeader {
+        grid-template-columns: 1.2rem 2.35rem minmax(0, 1fr);
+        padding: 1rem;
+    }
+
+    .aoGroup {
+        padding: 1rem;
+    }
+
+    .aoDisclosure summary {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .aoDisclosureIcon {
+        display: none;
+    }
+
+    .aoNumberGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aoNumberGrid .inputContainer:last-child {
+        grid-column: auto;
+    }
+
+    .aoSaveBar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .aoSave {
+        width: 100%;
+    }
+}

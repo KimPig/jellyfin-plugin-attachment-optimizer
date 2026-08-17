@@ -1,18 +1,20 @@
 ---
 name: "Attachment Optimizer"
 guid: "41341b7d-9374-4c82-824a-21d360036771"
-version: "12.0.0.1"
+version: "12.0.0.2"
 targetAbi: "12.0.0.0"
 framework: "net10.0"
-overview: "Optimizes Jellyfin attachment extraction, deduplication, and cache cleanup."
+overview: "Subtitle pre-extraction and optimized attachment caching for Jellyfin."
 description: >
-  Batches missing attachment extraction into one FFmpeg invocation, stores
-  identical attachment bytes once, preserves detected font formats, and safely
+  Pre-extracts embedded subtitles, pre-caches attachments without compatibility
+  files, batches missing extraction, deduplicates identical content, and safely
   cleans plugin-managed cache data.
 category: "General"
 owner: "KimPig"
 artifacts:
 - "Jellyfin.Plugin.AttachmentOptimizer.dll"
 changelog: |-
-  - Avoid empty per-media attachment directories during normal playback.
-  - Remove stale empty attachment directories during cache cleanup.
+  - Add separate library-scan options for subtitle extraction and attachment pre-caching.
+  - Add independent library filters and optional subtitle codec limits.
+  - Add optimized subtitle and attachment extraction tasks under an Attachment Optimizer category.
+  - Redesign the settings page for clearer extraction and optimizer controls.
